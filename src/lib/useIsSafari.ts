@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 /**
  * Hook to detect if the current browser is Safari
@@ -10,15 +10,13 @@ import { useEffect, useState } from "react";
 export function useIsSafari(defaultValue = false): boolean {
   const [isSafari, setIsSafari] = useState<boolean>(defaultValue);
 
-  useEffect(() => {
-    // Only run in browser environment
-    if (typeof window === "undefined") return;
-
-    const userAgent = window.navigator.userAgent;
-    const isSafariCheck =
-      userAgent.includes("Safari") && !userAgent.includes("Chrome");
-
-    setIsSafari(isSafariCheck);
+  useLayoutEffect(() => {
+    setIsSafari(
+      typeof window === "undefined"
+        ? false
+        : window.navigator.userAgent.includes("Safari") &&
+            !window.navigator.userAgent.includes("Chrom") // "Chrome" or "Chromium"
+    );
   }, []);
 
   return isSafari;
